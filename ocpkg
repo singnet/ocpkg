@@ -174,6 +174,7 @@ PACKAGES_BUILD=" build-essential \
 		swig \
 		flex \
 		librocksdb-dev \
+		libpcre2-dev \
 		"
 		#liblua5.1-0-dev \
 		#libxmlrpc-c3-dev \
@@ -837,18 +838,18 @@ install_opencog_github_repo ure
 # Install OpenCog
 install_opencog(){
 install_opencog_github_repo atomspace-rocks
-install_opencog_github_repo atomspace-cog
+#install_opencog_github_repo atomspace-cog
 # install_opencog_github_repo atomspace-restful
 # install_opencog_github_repo atomspace-explorer
+install_opencog_github_repo spacetime
 install_opencog_github_repo pln
 install_opencog_github_repo miner
 install_opencog_github_repo cogserver
 install_opencog_github_repo attention
-install_opencog_github_repo spacetime
 install_opencog_github_repo lg-atomese
 install_opencog_github_repo opencog
 install_opencog_github_repo learn
-install_opencog_github_repo generate
+#install_opencog_github_repo generate
 }
 
 # Install MOSES
@@ -895,13 +896,14 @@ cd $CURRENT_DIR
 
 install_bdwgc(){
 MESSAGE="Installing latest bdwgc ...." ; message
-local _version=$(curl https://github.com/ivmai/bdwgc/releases/latest \
+local _version=$(curl --silent -w %{redirect_url} https://github.com/ivmai/bdwgc/releases/latest \
     | cut -d "\"" -f 2 | cut -d "/" -f 8)
 local _dir_name="gc-${_version:1}"
 local _file_name="${_dir_name}.tar.gz"
+local _download_name="${_version}/${_file_name}"
 cd /tmp/
 rm -rf ${_dir_name}*
-get_github_latest_release ivmai bdwgc ${_file_name}
+get_github_latest_release ivmai bdwgc ${_download_name}
 tar -xvf ${_file_name}
 cd ${_dir_name}
 ./configure
